@@ -58,6 +58,8 @@ app.get("/data", async (req, res) => {
     
     const result = await client.query(query, [start, end]);
 
+		console.log("Результат запроса:", result.rows);
+
     res.json(result.rows); // Отправляем данные в формате JSON
   } catch (err) {
     console.error("Ошибка при выполнении запроса:", err);
