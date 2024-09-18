@@ -1,9 +1,6 @@
-// Форматирование даты (UTC)
+// Форматирование даты
 const formatDateTime = (date) => {
   const d = new Date(date);
-  // Добавляем 3 часа для перевода в московское время
-  
-
   const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
@@ -40,7 +37,7 @@ function getTimeDifferenceInMinutes(createDate, executeDate) {
 // Отрисовка таблицы
 function renderTable(data) {
   const tbody = document.getElementById("data-table-body");
-  tbody.innerHTML = ""; // Очищаем таблицу
+  tbody.innerHTML = ""; 
 
   data.forEach((item) => {
     const timeDiff = getTimeDifferenceInMinutes(item.create_dt, item.execute_dt);
@@ -58,12 +55,13 @@ function renderTable(data) {
 
     row.innerHTML = `
       <td>${item.pat_fio}</td>
+			<td>${item.cardnum}</td>
       <td>${item.naz_name}</td>
       <td>${formatDateTime(item.create_dt)}</td>
       <td>${item.created_by}</td>
       <td>${formatDateTime(item.execute_dt)}</td>
       <td>${item.executed_by}</td>
-      <td>${item.naz_create_in}</td>
+			<td>${item.naz_create_in}</td>
       <td>${timeDiff} минут</td>
     `;
 
@@ -88,3 +86,4 @@ document.getElementById("filter-button").addEventListener("click", () => {
     })
     .catch((error) => console.error("Ошибка:", error));
 });
+
