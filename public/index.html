@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Data Table</title>
+    <style li></style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="input__bar">
+        <label class="label" for="start-date">Начальная дата:</label>
+        <input class="input" type="date" id="start-date" />
+        <label class="label" for="end-date">Конечная дата:</label>
+        <input class="input" type="date" id="end-date" />
+        <button class="button" id="filter-button">Сформировать</button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>pat_fio</th>
+            <th>naz_name</th>
+            <th>create_dt</th>
+            <th>created_by</th>
+            <th>execute_dt</th>
+            <th>executed_by</th>
+						<th>naz_create_in</th>
+						<th>Ожидание приема(в минутах)</th>
+          </tr>
+        </thead>
+        <tbody id="data-table-body"></tbody>
+      </table>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
