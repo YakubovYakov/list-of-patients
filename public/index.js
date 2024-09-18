@@ -1,11 +1,11 @@
-// Форматирование даты
+// Форматирование даты (UTC)
 const formatDateTime = (date) => {
   const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
+  const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const year = d.getUTCFullYear();
+  const hours = String(d.getUTCHours()).padStart(2, "0");
+  const minutes = String(d.getUTCMinutes()).padStart(2, "0");
 
   return `${day}-${month}-${year} ${hours}:${minutes}`;
 };
@@ -60,7 +60,7 @@ function renderTable(data) {
       <td>${item.created_by}</td>
       <td>${formatDateTime(item.execute_dt)}</td>
       <td>${item.executed_by}</td>
-			<td>${item.naz_create_in}</td>
+      <td>${item.naz_create_in}</td>
       <td>${timeDiff} минут</td>
     `;
 
@@ -84,9 +84,4 @@ document.getElementById("filter-button").addEventListener("click", () => {
       renderTable(filteredData);
     })
     .catch((error) => console.error("Ошибка:", error));
-});
-
-// Инициализация при загрузке страницы
-document.addEventListener("DOMContentLoaded", () => {
-  getDataAndRenderTable();
 });
