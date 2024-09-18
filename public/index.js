@@ -71,13 +71,28 @@ function renderTable(data) {
 
 // Фильтрация по дате
 document.getElementById("filter-button").addEventListener("click", () => {
-  const startDate = document.getElementById("start-date").value;
-  const endDate = document.getElementById("end-date").value;
+  const startDateInput = document.getElementById("start-date").value;
+  const endDateInput = document.getElementById("end-date").value;
 
-  if (!startDate || !endDate) {
+  if (!startDateInput || !endDateInput) {
     alert("Пожалуйста, заполните обе даты!");
     return;
   }
+
+	const startDate = new Date(startDateInput)
+	const endDate = new Date(endDateInput)
+	const today = new Date();
+
+	if (startDate > endDate) {
+		alert('Начальная дата не может быть больше конечной')
+		return
+	}
+
+	if (startDate > today) {
+		alert('Начальная дата не может быть больше текущей')
+	}
+
+	
 
   fetch(`/data?startDate=${startDate}&endDate=${endDate}`)
     .then((response) => response.json())
