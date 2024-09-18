@@ -4,7 +4,7 @@ const formatDateTime = (date) => {
   // Добавляем 3 часа для перевода в московское время
   
 
-  const day = String(d.getutcDate()).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
   const hours = String(d.getHours()).padStart(2, "0");
