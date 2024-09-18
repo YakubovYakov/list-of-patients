@@ -59,7 +59,7 @@ table {
 th,
 
 th {
-  
+	/* border-bottom: 1px solid black; */
   color: #333;
 	
 }
@@ -82,4 +82,9 @@ input:focus {
   outline: none;
   border-color: #4caf50;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.tbody {
+	border-top: 1px solid black;
+	border-left: 1px solid black;
 }
