@@ -36,8 +36,9 @@ app.get("/data", async (req, res) => {
       na.create_dt AS create_dt,
       INITCAP(CONCAT_WS(' ', p_emp_create.surname, p_emp_create.name, p_emp_create.patron)) AS created_by,
       na.sign_dt AS execute_dt,
-      INITCAP(CONCAT_WS(' ', p_emp_execute.surname, p_emp_execute.name, p_emp_execute.patron)) AS executed_by
-      FROM mm.naz na
+      INITCAP(CONCAT_WS(' ', p_emp_execute.surname, p_emp_execute.name, p_emp_execute.patron)) AS executed_by, 
+			d.name AS naz_create_in
+      FROM mm.naz na 
       INNER JOIN mm.naz_type nt ON nt.id = na.naz_type_id
       INNER JOIN mm.naz_type_dir ntd ON ntd.id = nt.naz_type_dir_id
       INNER JOIN (
@@ -47,9 +48,12 @@ app.get("/data", async (req, res) => {
       JOIN mm.hospdoc hd ON hd.mdoc_id = na.mdoc_id
       JOIN mm.emp e_create ON e_create.id = na.creator_emp_id
       JOIN mm.people p_emp_create ON p_emp_create.id = e_create.people_id
-      JOIN mm.emp e_execute ON e_execute.id = na.creator_emp_id
+      JOIN mm.emp e_execute ON e_execute.id = na.run_emp_id
+			join mm.dept d on d.id=e_create.dept_id 
+			and d.id <> 'efa2f533-bb52-468b-be83-7b205dcb61f8' -- не КДО
       JOIN mm.people p_emp_execute ON p_emp_execute.id = e_execute.people_id
       WHERE na.create_dt::DATE BETWEEN $1 AND $2
+			and na.naz_extr_id=1
     `;
     
     const result = await client.query(query, [start, end]);
