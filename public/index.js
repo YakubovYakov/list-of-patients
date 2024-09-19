@@ -1,3 +1,6 @@
+// index.js
+// import { Chart } from "chart.js";
+
 // Форматирование даты
 const formatDateTime = (date) => {
   const d = new Date(date);
@@ -18,6 +21,10 @@ function getDataAndRenderTable() {
     .then((response) => response.json())
     .then((data) => {
       console.log("Получены данные:", data);
+
+      const sortedData = data.sort(
+        (a, b) => new Date(a.create_dt) - new Date(b.create_dt)
+      );
       renderTable(data);
     })
     .catch((error) => console.error("Ошибка:", error));
@@ -37,20 +44,25 @@ function getTimeDifferenceInMinutes(createDate, executeDate) {
 // Отрисовка таблицы
 function renderTable(data) {
   const tbody = document.getElementById("data-table-body");
-  tbody.innerHTML = ""; 
+  tbody.innerHTML = "";
 
   data.forEach((item) => {
-    const timeDiff = getTimeDifferenceInMinutes(item.create_dt, item.execute_dt);
-
-    if (isNaN(timeDiff) || timeDiff < 30) return;
+    const timeDiff = getTimeDifferenceInMinutes(
+      item.create_dt,
+      item.execute_dt
+    );
 
     const row = document.createElement("tr");
 
     // Окрашивание строк
-    if (timeDiff >= 30 && timeDiff <= 120) {
-      row.style.backgroundColor = "yellow"; // Жёлтый цвет для 30-120 минут
+		if (timeDiff < 0) {
+      row.style.backgroundColor = "lightblue"; 
+    } else if (timeDiff >= 0 && timeDiff < 30) {
+      row.style.backgroundColor = "lightyellow";
+    } else if (timeDiff >= 30 && timeDiff <= 120) {
+      row.style.backgroundColor = "yellow";
     } else if (timeDiff > 120) {
-      row.style.backgroundColor = "red"; // Красный цвет для более 120 минут
+      row.style.backgroundColor = "red";
     }
 
     row.innerHTML = `
@@ -79,26 +91,53 @@ document.getElementById("filter-button").addEventListener("click", () => {
     return;
   }
 
-	const startDate = new Date(startDateInput)
-	const endDate = new Date(endDateInput)
-	const today = new Date();
-
-	if (startDate > endDate) {
-		alert('Начальная дата не может быть больше конечной')
-		return
-	}
-
-	if (startDate > today) {
-		alert('Начальная дата не может быть больше текущей')
-	}
-
-	
+  const startDate = new Date(startDateInput).toISOString().split("T")[0];
+  const endDate = new Date(endDateInput).toISOString().split("T")[0];
 
   fetch(`/data?startDate=${startDate}&endDate=${endDate}`)
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((filteredData) => {
+      const sortedData = filteredData.sort(
+        (a, b) => new Date(a.create_dt) - new Date(b.create_dt)
+      );
       renderTable(filteredData);
     })
     .catch((error) => console.error("Ошибка:", error));
 });
 
+// Отрисовка графика
+// const renderChart = () => {
+//   const labels = data.map((item) => formatDateTime(item.create_dt));
+//   const timeDiffs = data.map((item) =>
+//     getTimeDifferenceInMinutes(item.create_dt, item.execute_dt)
+//   );
+
+//   const ctx = document.getElementById("myChart").getContext("2d");
+//   new Chart(ctx, {
+//     type: "line",
+//     data: {
+//       labels: labels,
+//       datasets: [
+//         {
+//           label: "Ожидание приема ( в минутах )",
+//           data: timeDiffs,
+//           backgroundColor: "rgba(72, 192, 192, 0.2)",
+//           borderColor: "rgba(75, 192, 192, 1)",
+//           borderWidth: 1,
+//         },
+//       ],
+//     },
+//     options: {
+//       scales: {
+//         y: {
+//           beginAtZero: true,
+//         },
+//       },
+//     },
+//   });
+// };
